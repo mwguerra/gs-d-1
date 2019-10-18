@@ -31,6 +31,7 @@ Array.prototype.getById = function(id) {
 server.use((req, res, next) => {
     requestsCounter++
     console.log(`Requisições: ${requestsCounter}`)
+    return next()
 })
 
 function verifyIfProjectExists (req, res, next) {

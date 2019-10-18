@@ -2,6 +2,7 @@ const express = require('express')
 const server = express()
 server.use(express.json())
 
+let requestsCounter = 0
 let projects = [{ 
     "id": "01234", 
     "title": "Vacation Time",
@@ -30,6 +31,7 @@ Array.prototype.getById = function(id) {
 server.use((req, res, next) => {
     requestsCounter++
     console.log(`Requisições: ${requestsCounter}`)
+    return next()
 })
 
 function verifyIfProjectExists (req, res, next) {
