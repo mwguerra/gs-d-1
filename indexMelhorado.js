@@ -29,8 +29,12 @@ Array.prototype.getById = function(id) {
 ////////////////////////////
 
 server.use((req, res, next) => {
+    if (requestsCounter>0) {
+        process.stdout.write('.')
+    } else {
+        process.stdout.write('Requisições: .')
+    }
     requestsCounter++
-    console.log(`Requisições: ${requestsCounter}`)
     return next()
 })
 
@@ -94,9 +98,9 @@ server.get('/projects/:id/tasks', verifyIfProjectExists, (req, res) => {
 })
 
 server.post('/projects/:id/tasks', verifyIfProjectExists, (req, res) => {
-    const { title } = req.body
+    const { task } = req.body
 
-    req.project.tasks.push(title)
+    req.project.tasks.push(task)
 
     return res.json(req.project)
 })
@@ -106,9 +110,11 @@ server.delete('/projects/:id/tasks', verifyIfProjectExists, (req, res) => {
     const { tasks } = req.project
     const taskIndex = tasks.findIndex(t => t == task)
 
-    task.splice(taskIndex, 1)
+    if (taskIndex>=0) {
+        tasks.splice(taskIndex, 1)
+    }
 
-    return res.json(req.project)
+    return res.json(req.project.tasks)
 })
 
 ////////////////////////////
