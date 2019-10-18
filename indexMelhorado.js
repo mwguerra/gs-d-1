@@ -1,9 +1,10 @@
 const express = require('express')
 const server = express()
+const { cloneDeep } = require('lodash')
+
 server.use(express.json())
 
-let requestsCounter = 0
-let projects = [{ 
+const defaultProjects = [{ 
     "id": "01234", 
     "title": "Vacation Time",
     "tasks": [ 
@@ -11,6 +12,8 @@ let projects = [{
         "Watch movies"
     ]
 }]
+let requestsCounter = 0
+let projects = cloneDeep(defaultProjects)
 
 ////////////////////////////
 // Prototypes
@@ -57,6 +60,11 @@ function verifyIfProjectExists (req, res, next) {
 ////////////////////////////
 // projects
 ////////////////////////////
+
+server.get('/reset', (req, res) => {
+    projects = cloneDeep(defaultProjects)
+    return res.json(projects)
+})
 
 server.get('/projects', (req, res) => {
     return res.json(projects)
